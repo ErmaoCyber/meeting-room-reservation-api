@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MeetingRoomBooking.Domain\MeetingRoomBooking.Domain.csproj" />
+    <ProjectReference Include="..\MeetingRoomBooking.Application\MeetingRoomBooking.Application.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
