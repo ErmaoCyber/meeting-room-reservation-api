@@ -27,6 +27,9 @@ builder.Services.AddInfrastructurePersistence(cs!);
 builder.Services.AddScoped<GetRoomsService>();
 builder.Services.AddScoped<CreateRoomService>();
 builder.Services.AddScoped<GetRoomByIdService>();
+builder.Services.AddScoped<CreateBookingService>();
+builder.Services.AddScoped<GetBookingsForRoomService>();
+
 
 
     

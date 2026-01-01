@@ -8,46 +8,74 @@ namespace MeetingRoomBooking.Api.Controllers;
 [Route("api/[controller]")]
 public class BookingsController : ControllerBase
 {
-    private readonly CreateBookingService _service;
+    // 依赖 1：创建 Booking 的用例（Application 层）
+    private readonly CreateBookingService _createBookingService;
 
-    private readonly GetBookingsForRoomService _queryService;
+    // 依赖 2：按 Room 查询 Booking 列表的用例（Application 层）
+    private readonly GetBookingsForRoomService _getBookingsForRoomService;
 
-    public BookingsController(CreateBookingService service, GetBookingsForRoomService queryService)
+    // 构造器注入：DI 会自动把 Program.cs 注册的服务传进来
+    public BookingsController(
+        CreateBookingService createBookingService,
+        GetBookingsForRoomService getBookingsForRoomService)
     {
-        _service = service;
-        _queryService = queryService;
-
+        _createBookingService = createBookingService;
+        _getBookingsForRoomService = getBookingsForRoomService;
     }
 
+    // 将业务错误码映射为正确的 HTTP 状态码（工程化：集中管理）
+    private static int MapToStatusCode(BookingErrorCode code) => code switch
+    {
+        BookingErrorCode.InvalidRequest  => StatusCodes.Status400BadRequest,
+        BookingErrorCode.RoomNotFound    => StatusCodes.Status404NotFound,
+        BookingErrorCode.RoomInactive    => StatusCodes.Status409Conflict,
+        BookingErrorCode.BookingConflict => StatusCodes.Status409Conflict,
+        _ => StatusCodes.Status400BadRequest
+    };
+
+    /// <summary>
+    /// Create a booking for a room.
+    /// </summary>
     [HttpPost]
-    [ProducesResponseType(typeof(CreateBookingResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(CreateBookingResult), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(CreateBookingResult), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(CreateBookingResult), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Create([FromBody] CreateBookingRequest request)
     {
-        var result = await _service.CreateAsync(request);
+        // 1) 调用 Application 层用例
+        var result = await _createBookingService.CreateAsync(request);
 
+        // 2) 失败：根据 ErrorCode 返回语义化状态码（400/404/409）
         if (!result.Success)
         {
-            return result.ErrorCode switch
+            var status = MapToStatusCode(result.ErrorCode);
+
+            // ⚠️ 这里用 result.ErrorMessage（如果你类里叫别的名字，请保持一致）
+            return StatusCode(status, new
             {
-                BookingErrorCode.RoomNotFound => NotFound(result),
-                BookingErrorCode.BookingConflict => Conflict(result),
-                BookingErrorCode.RoomInactive => BadRequest(result),
-                BookingErrorCode.InvalidRequest => BadRequest(result),
-                _ => BadRequest(result)
-            };
+                code = result.ErrorCode.ToString(),
+                message = result.Error
+            });
         }
 
-        return Ok(result);
-
+        // 3) 成功：201 Created，并把 bookingId 返回给调用方
+        // 当前你只有 “按 roomId 查询列表” 的 GET，所以 Location 指向 Get(roomId) 是合理的
+        return CreatedAtAction(
+            nameof(Get),
+            new { roomId = request.RoomId },
+            new { bookingId = result.BookingId }
+        );
     }
+
+    /// <summary>
+    /// Get bookings for a room.
+    /// </summary>
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromQuery] Guid roomId)
     {
-        var result = await _queryService.GetAsync(roomId);
+        var result = await _getBookingsForRoomService.GetAsync(roomId);
         return Ok(result);
     }
-
 }
