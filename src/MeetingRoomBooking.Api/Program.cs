@@ -15,6 +15,10 @@ builder.Services.AddScoped<CreateBookingService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<GetBookingsForRoomService>();
+builder.Services.AddSingleton<IRoomRepository, InMemoryRoomRepository>();
+
+
 
 var app = builder.Build();
 
