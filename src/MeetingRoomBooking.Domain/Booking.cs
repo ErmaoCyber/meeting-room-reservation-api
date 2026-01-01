@@ -7,6 +7,7 @@ public class Booking
     public DateTime StartTime { get; }
     public DateTime EndTime { get; }
 
+    private Booking() { }
     public Booking(Guid id, Guid roomId, DateTime startTime, DateTime endTime)
     {
         if (endTime <= startTime)
@@ -17,4 +18,6 @@ public class Booking
         StartTime = startTime;
         EndTime = endTime;
     }
+
+
 }

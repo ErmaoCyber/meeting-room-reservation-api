@@ -7,8 +7,14 @@ public class Room
     public int Capacity { get; }
     public bool IsActive { get; }
 
+    private Room() { Name = null!; }
+
     public Room(Guid id, string name, int capacity, bool isActive = true)
     {
+        if (id == Guid.Empty)
+            throw new ArgumentException("Room id cannot be empty.");
+
+
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Room name cannot be empty.");
 
@@ -20,4 +26,6 @@ public class Room
         Capacity = capacity;
         IsActive = isActive;
     }
+
+
 }
