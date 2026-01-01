@@ -3,6 +3,7 @@ using MeetingRoomBooking.Application.Interfaces;
 using MeetingRoomBooking.Infrastructure;
 using MeetingRoomBooking.Infrastructure.Persistence;
 using MeetingRoomBooking.Domain;
+using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<GetBookingsForRoomService>();
 // builder.Services.AddSingleton<IRoomRepository, InMemoryRoomRepository>();
-builder.Services.AddInfrastructurePersistence("Data Source=meetingroombooking.db");
+// builder.Services.AddInfrastructurePersistence("Data Source=meetingroombooking.db");
+var cs = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddInfrastructurePersistence(cs!);
+
 
 
 
@@ -28,18 +32,23 @@ builder.Services.AddInfrastructurePersistence("Data Source=meetingroombooking.db
 
 var app = builder.Build();
 
+// using (var scope = app.Services.CreateScope())
+// {
+//     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//     db.Database.EnsureCreated();
+
+//     var roomId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+
+//     if (!db.Rooms.Any(r => r.Id == roomId))
+//     {
+//         db.Rooms.Add(new Room(roomId, "Room A", 8, true));
+//         db.SaveChanges();
+//     }
+// }
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
-
-    var roomId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-
-    if (!db.Rooms.Any(r => r.Id == roomId))
-    {
-        db.Rooms.Add(new Room(roomId, "Room A", 8, true));
-        db.SaveChanges();
-    }
+    db.Database.Migrate();
 }
 
 
