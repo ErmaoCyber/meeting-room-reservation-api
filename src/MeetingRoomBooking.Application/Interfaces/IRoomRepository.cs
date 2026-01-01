@@ -7,4 +7,8 @@ public interface IRoomRepository
     Task<Room?> GetByIdAsync(Guid roomId);
 
     Task<IReadOnlyList<Room>> GetAllAsync();
+
+    
+    Task<Room?> GetByNameAsync(string name);
+    Task AddAsync(Room room);
 }

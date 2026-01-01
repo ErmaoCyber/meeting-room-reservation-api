@@ -20,7 +20,7 @@ public class InMemoryRoomRepository : IRoomRepository
         return Task.FromResult(room);
     }
 
-      public Task<IReadOnlyList<Room>> GetAllAsync()
+    public Task<IReadOnlyList<Room>> GetAllAsync()
     {
         IReadOnlyList<Room> result = _rooms
             .OrderBy(r => r.Name)
@@ -28,4 +28,17 @@ public class InMemoryRoomRepository : IRoomRepository
 
         return Task.FromResult(result);
     }
+
+    public Task<Room?> GetByNameAsync(string name)
+    {
+        var room = _rooms.SingleOrDefault(r => r.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        return Task.FromResult(room);
+    }
+
+    public Task AddAsync(Room room)
+    {
+        _rooms.Add(room);
+        return Task.CompletedTask;
+    }
+
 }

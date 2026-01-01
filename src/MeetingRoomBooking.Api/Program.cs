@@ -25,6 +25,8 @@ builder.Services.AddScoped<GetBookingsForRoomService>();
 var cs = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddInfrastructurePersistence(cs!);
 builder.Services.AddScoped<GetRoomsService>();
+builder.Services.AddScoped<CreateRoomService>();
+
     
 var app = builder.Build();
 
