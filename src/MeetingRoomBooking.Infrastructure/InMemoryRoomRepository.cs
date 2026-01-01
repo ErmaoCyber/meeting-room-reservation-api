@@ -19,4 +19,13 @@ public class InMemoryRoomRepository : IRoomRepository
         var room = _rooms.SingleOrDefault(r => r.Id == roomId);
         return Task.FromResult(room);
     }
+
+      public Task<IReadOnlyList<Room>> GetAllAsync()
+    {
+        IReadOnlyList<Room> result = _rooms
+            .OrderBy(r => r.Name)
+            .ToList();
+
+        return Task.FromResult(result);
+    }
 }

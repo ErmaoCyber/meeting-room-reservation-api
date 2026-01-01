@@ -24,12 +24,8 @@ builder.Services.AddScoped<GetBookingsForRoomService>();
 // builder.Services.AddInfrastructurePersistence("Data Source=meetingroombooking.db");
 var cs = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddInfrastructurePersistence(cs!);
-
-
-
-
-
-
+builder.Services.AddScoped<GetRoomsService>();
+    
 var app = builder.Build();
 
 // using (var scope = app.Services.CreateScope())
