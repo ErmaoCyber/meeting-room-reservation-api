@@ -27,12 +27,17 @@ public class EfBookingRepository : IBookingRepository
         await _db.SaveChangesAsync();
     }
 
-   public async Task<IReadOnlyList<Booking>> GetAllForRoomAsync(Guid roomId)
-{
-    return await _db.Bookings
-        .Where(b => b.RoomId == roomId)
-        .OrderBy(b => b.StartTime)
-        .ToListAsync();
-}
+    public async Task<IReadOnlyList<Booking>> GetAllForRoomAsync(Guid roomId)
+    {
+        return await _db.Bookings
+            .Where(b => b.RoomId == roomId)
+            .OrderBy(b => b.StartTime)
+            .ToListAsync();
+    }
+
+    public async Task<Booking?> GetByIdAsync(Guid bookingId)
+    {
+        return await _db.Bookings.SingleOrDefaultAsync(b => b.Id == bookingId);
+    }
 
 }

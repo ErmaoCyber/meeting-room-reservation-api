@@ -29,10 +29,8 @@ builder.Services.AddScoped<CreateRoomService>();
 builder.Services.AddScoped<GetRoomByIdService>();
 builder.Services.AddScoped<CreateBookingService>();
 builder.Services.AddScoped<GetBookingsForRoomService>();
+builder.Services.AddScoped<GetBookingByIdService>();
 
-
-
-    
 var app = builder.Build();
 
 // using (var scope = app.Services.CreateScope())

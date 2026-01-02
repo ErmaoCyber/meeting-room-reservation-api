@@ -14,21 +14,26 @@ public class BookingsController : ControllerBase
     // 依赖 2：按 Room 查询 Booking 列表的用例（Application 层）
     private readonly GetBookingsForRoomService _getBookingsForRoomService;
 
+    private readonly GetBookingByIdService _getBookingByIdService;
+
     // 构造器注入：DI 会自动把 Program.cs 注册的服务传进来
     public BookingsController(
         CreateBookingService createBookingService,
-        GetBookingsForRoomService getBookingsForRoomService)
+        GetBookingsForRoomService getBookingsForRoomService,
+        GetBookingByIdService getBookingByIdService)
     {
         _createBookingService = createBookingService;
         _getBookingsForRoomService = getBookingsForRoomService;
+        _getBookingByIdService = getBookingByIdService;
     }
+
 
     // 将业务错误码映射为正确的 HTTP 状态码（工程化：集中管理）
     private static int MapToStatusCode(BookingErrorCode code) => code switch
     {
-        BookingErrorCode.InvalidRequest  => StatusCodes.Status400BadRequest,
-        BookingErrorCode.RoomNotFound    => StatusCodes.Status404NotFound,
-        BookingErrorCode.RoomInactive    => StatusCodes.Status409Conflict,
+        BookingErrorCode.InvalidRequest => StatusCodes.Status400BadRequest,
+        BookingErrorCode.RoomNotFound => StatusCodes.Status404NotFound,
+        BookingErrorCode.RoomInactive => StatusCodes.Status409Conflict,
         BookingErrorCode.BookingConflict => StatusCodes.Status409Conflict,
         _ => StatusCodes.Status400BadRequest
     };
@@ -62,8 +67,8 @@ public class BookingsController : ControllerBase
         // 3) 成功：201 Created，并把 bookingId 返回给调用方
         // 当前你只有 “按 roomId 查询列表” 的 GET，所以 Location 指向 Get(roomId) 是合理的
         return CreatedAtAction(
-            nameof(Get),
-            new { roomId = request.RoomId },
+            nameof(GetById),
+            new { id = result.BookingId },
             new { bookingId = result.BookingId }
         );
     }
@@ -78,4 +83,17 @@ public class BookingsController : ControllerBase
         var result = await _getBookingsForRoomService.GetAsync(roomId);
         return Ok(result);
     }
+
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var booking = await _getBookingByIdService.GetAsync(id);
+        if (booking is null)
+            return NotFound(new { message = "Booking not found." });
+
+        return Ok(booking);
+    }
+
 }

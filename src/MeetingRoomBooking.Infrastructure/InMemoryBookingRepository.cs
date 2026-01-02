@@ -31,4 +31,11 @@ public class InMemoryBookingRepository : IBookingRepository
         _bookings.Add(booking);
         return Task.CompletedTask;
     }
+
+    public Task<Booking?> GetByIdAsync(Guid bookingId)
+    {
+        var booking = _bookings.SingleOrDefault(b => b.Id == bookingId);
+        return Task.FromResult(booking);
+    }
+
 }

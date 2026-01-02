@@ -9,4 +9,7 @@ public interface IBookingRepository
     Task<IReadOnlyList<Booking>> GetAllForRoomAsync(Guid roomId);
 
     Task AddAsync(Booking booking);
+
+    Task<Booking?> GetByIdAsync(Guid bookingId);
+
 }
