@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingRoomBooking.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingRoomBooking.Infrastructure", "src\MeetingRoomBooking.Infrastructure\MeetingRoomBooking.Infrastructure.csproj", "{51E151F4-C2C8-4913-9B33-01AEFF7C6867}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingRoomBooking.Domain.Tests", "MeetingRoomBooking.Domain.Tests\MeetingRoomBooking.Domain.Tests.csproj", "{285F1CBE-D4BB-49AA-80CF-6255D578DCFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetingRoomBooking.Application.Tests", "MeetingRoomBooking.Application.Tests\MeetingRoomBooking.Application.Tests.csproj", "{D4ABE9D0-1D17-473B-B2BB-D662877FB24E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +42,14 @@ Global
 		{51E151F4-C2C8-4913-9B33-01AEFF7C6867}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51E151F4-C2C8-4913-9B33-01AEFF7C6867}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51E151F4-C2C8-4913-9B33-01AEFF7C6867}.Release|Any CPU.Build.0 = Release|Any CPU
+		{285F1CBE-D4BB-49AA-80CF-6255D578DCFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{285F1CBE-D4BB-49AA-80CF-6255D578DCFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{285F1CBE-D4BB-49AA-80CF-6255D578DCFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{285F1CBE-D4BB-49AA-80CF-6255D578DCFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4ABE9D0-1D17-473B-B2BB-D662877FB24E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4ABE9D0-1D17-473B-B2BB-D662877FB24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4ABE9D0-1D17-473B-B2BB-D662877FB24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4ABE9D0-1D17-473B-B2BB-D662877FB24E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{29423275-F171-4FFC-9567-133F7485C47E} = {2E97E0B7-CC87-45B6-AB77-CFDDB408DAE4}
