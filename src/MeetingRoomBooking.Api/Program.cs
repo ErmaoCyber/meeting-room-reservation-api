@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var cs = builder.Configuration.GetConnectionString("Default");
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -22,7 +24,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<GetBookingsForRoomService>();
 // builder.Services.AddSingleton<IRoomRepository, InMemoryRoomRepository>();
 // builder.Services.AddInfrastructurePersistence("Data Source=meetingroombooking.db");
-var cs = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddInfrastructurePersistence(cs!);
 builder.Services.AddScoped<GetRoomsService>();
 builder.Services.AddScoped<CreateRoomService>();
@@ -53,14 +54,14 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<MeetingRoomBooking.Api.Middleware.ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

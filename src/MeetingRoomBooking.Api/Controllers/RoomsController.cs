@@ -48,4 +48,11 @@ public class RoomsController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = result.RoomId }, new { roomId = result.RoomId });
     }
+
+    // [HttpGet("throw")]
+    // public IActionResult Throw()
+    // {
+    //     throw new InvalidOperationException("Test exception from /api/rooms/throw");
+    // }
+
 }
