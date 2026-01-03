@@ -96,4 +96,10 @@ public class BookingsController : ControllerBase
         return Ok(booking);
     }
 
+    // [HttpGet("boom")]
+    // public IActionResult Boom()
+    // {
+    //     throw new InvalidOperationException("This is a test exception");
+    // }
+
 }
