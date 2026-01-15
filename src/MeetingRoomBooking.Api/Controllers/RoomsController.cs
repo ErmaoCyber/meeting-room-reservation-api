@@ -1,6 +1,8 @@
 using MeetingRoomBooking.Application.Dtos;
 using MeetingRoomBooking.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using MeetingRoomBooking.Api.Dtos;
+
 
 namespace MeetingRoomBooking.Api.Controllers;
 
@@ -33,10 +35,20 @@ public class RoomsController : ControllerBase
     public async Task<IActionResult> GetById(Guid id)
     {
         var room = await _getRoomByIdService.GetAsync(id);
-        if (room is null) return NotFound(new { message = "Room not found." });
+        if (room is null)
+            return Error(StatusCodes.Status404NotFound, "RoomNotFound", "Room not found.");
+
 
         return Ok(room);
     }
+
+    private string? TraceId => HttpContext?.TraceIdentifier;
+
+    private IActionResult Error(int statusCode, string errorCode, string message)
+    {
+        return StatusCode(statusCode, new ApiErrorResponse(errorCode, message, TraceId));
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateRoomRequest request)
@@ -44,7 +56,8 @@ public class RoomsController : ControllerBase
         var result = await _createRoomService.CreateAsync(request);
 
         if (!result.Success)
-            return BadRequest(new { message = result.ErrorMessage });
+            return Error(StatusCodes.Status400BadRequest, "InvalidRequest", result.ErrorMessage);
+
 
         return CreatedAtAction(nameof(GetById), new { id = result.RoomId }, new { roomId = result.RoomId });
     }

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MeetingRoomBooking.Application.Dtos;
 using MeetingRoomBooking.Application.Services;
+using MeetingRoomBooking.Api.Dtos;
+
 
 namespace MeetingRoomBooking.Api.Controllers;
 
@@ -56,12 +58,7 @@ public class BookingsController : ControllerBase
         {
             var status = MapToStatusCode(result.ErrorCode);
 
-            // ⚠️ 这里用 result.ErrorMessage（如果你类里叫别的名字，请保持一致）
-            return StatusCode(status, new
-            {
-                code = result.ErrorCode.ToString(),
-                message = result.Error
-            });
+            return Error(status, result.ErrorCode, result.Error);
         }
 
         // 3) 成功：201 Created，并把 bookingId 返回给调用方
@@ -72,6 +69,14 @@ public class BookingsController : ControllerBase
             new { bookingId = result.BookingId }
         );
     }
+
+    private string? TraceId => HttpContext?.TraceIdentifier;
+
+    private IActionResult Error(int statusCode, BookingErrorCode code, string message)
+    {
+        return StatusCode(statusCode, new ApiErrorResponse(code.ToString(), message, TraceId));
+    }
+
 
     /// <summary>
     /// Get bookings for a room.
@@ -91,8 +96,10 @@ public class BookingsController : ControllerBase
     {
         var booking = await _getBookingByIdService.GetAsync(id);
         if (booking is null)
-            return NotFound(new { message = "Booking not found." });
-
+        {
+            return StatusCode(StatusCodes.Status404NotFound,
+                new ApiErrorResponse("BookingNotFound", "Booking not found.", TraceId));
+        }
         return Ok(booking);
     }
 

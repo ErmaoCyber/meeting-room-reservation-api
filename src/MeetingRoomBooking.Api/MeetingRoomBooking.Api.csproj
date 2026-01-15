@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MeetingRoomBooking.Application\MeetingRoomBooking.Application.csproj" />
     <ProjectReference Include="..\MeetingRoomBooking.Infrastructure\MeetingRoomBooking.Infrastructure.csproj" />
+    <InternalsVisibleTo Include="MeetingRoomBooking.Api.Tests" />
   </ItemGroup>
 
 </Project>
