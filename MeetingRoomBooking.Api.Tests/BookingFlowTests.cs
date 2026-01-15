@@ -6,11 +6,11 @@ using Xunit;
 
 namespace MeetingRoomBooking.Api.Tests;
 
-public class BookingFlowTests : IClassFixture<WebApplicationFactory<Program>>
+public class BookingFlowTests : IClassFixture<TestAppFactory>
 {
     private readonly HttpClient _client;
 
-    public BookingFlowTests(WebApplicationFactory<Program> factory)
+    public BookingFlowTests(TestAppFactory factory)
     {
         _client = factory.CreateClient();
     }
@@ -24,8 +24,8 @@ public class BookingFlowTests : IClassFixture<WebApplicationFactory<Program>>
         // 1) Create Room
         var createRoomReq = new
         {
-            Name = uniqueRoomName,
-            Capacity = 6
+            name = $"Test Room {Guid.NewGuid():N}",
+            capacity = 6
         };
 
         var roomResp = await _client.PostAsJsonAsync("/api/rooms", createRoomReq);
