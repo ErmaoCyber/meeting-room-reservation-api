@@ -1,4 +1,4 @@
-# Meeting Room Booking System
+# meeting-room-reservation-api
 
 A .NET Web API project implementing meeting room scheduling with conflict detection and clean layered architecture.
 
@@ -6,7 +6,7 @@ A .NET Web API project implementing meeting room scheduling with conflict detect
 
 ## Overview
 
-The **Meeting Room Booking System** is a web application that allows users to reserve meeting rooms, manage availability, and prevent scheduling conflicts. It models a realistic office booking workflow: rooms have capacities and time slots, and bookings must pass validation rules before being confirmed.
+The **meeting-room-reservation-api** is a web application that allows users to reserve meeting rooms, manage availability, and prevent scheduling conflicts. It models a realistic office booking workflow: rooms have capacities and time slots, and bookings must pass validation rules before being confirmed.
 
 Core focus of the project:
 
@@ -53,7 +53,7 @@ Core focus of the project:
 The project follows a layered architecture:
 
 ```
-API Controller â†’ Application/Service â†’ Domain â†’ Infrastructure (EF Core) â†’ Database
+API Controller â†?Application/Service â†?Domain â†?Infrastructure (EF Core) â†?Database
 ```
 
 Responsibilities:
@@ -71,9 +71,9 @@ Key design decision: booking validation occurs in the **service layer** to guara
 
 Entities:
 
-* **Room** â€“ capacity, name, availability
-* **Booking** â€“ time range reservation
-* **User/Organizer** â€“ booking owner
+* **Room** â€?capacity, name, availability
+* **Booking** â€?time range reservation
+* **User/Organizer** â€?booking owner
 
 Business Rules:
 
@@ -92,8 +92,8 @@ Business Rules:
 ### Steps
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/MeetingRoomBooking.git
-cd MeetingRoomBooking
+git clone https://github.com/YOUR_USERNAME/meeting-room-reservation-api.git
+cd meeting-room-reservation-api
 ```
 
 Restore packages:
@@ -152,12 +152,12 @@ DELETE /api/bookings/{id}
 
 ## API Preview
 
-The API is documented using Swagger UI.  
-After running the application, the interactive documentation is available at:
+Swagger UI is available after starting the server at `/swagger`.
 
-http://localhost:5076/swagger
+<img src="images/swagger.png" width="900" alt="Swagger UI">
+<img src="images/swagger.png" width="800">
+```
+
+---
 
 
-Below is a preview of the running system:
-
-<img src="images/swagger.png" width="850">
