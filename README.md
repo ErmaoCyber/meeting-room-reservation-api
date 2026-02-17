@@ -6,45 +6,41 @@ A .NET Web API project implementing meeting room scheduling with conflict detect
 
 ## Overview
 
-The **meeting-room-reservation-api** is a web application that allows users to reserve meeting rooms, manage availability, and prevent scheduling conflicts. It models a realistic office booking workflow: rooms have capacities and time slots, and bookings must pass validation rules before being confirmed.
+The **meeting-room-reservation-api** is a backend service that allows users to reserve meeting rooms, manage availability, and prevent scheduling conflicts. It models a realistic office booking workflow: rooms have capacities and time slots, and bookings must pass validation rules before being confirmed.
 
 Core focus of the project:
-
-* Scheduling logic & conflict detection
-* Layered backend architecture
-* REST API design
-* Database persistence
-* Prepared for a React admin/user interface
+- Scheduling logic & conflict detection
+- Layered backend architecture
+- REST API design
+- Database persistence (EF Core + SQLite)
+- Ready for a future React admin/user UI
 
 ---
 
 ## Key Features
 
-* View available meeting rooms
-* Create and cancel bookings
-* Prevent doubleâ€‘booking (time overlap validation)
-* Room capacity management
-* Booking history records
-* Serverâ€‘side validation rules
+- View available meeting rooms
+- Create and cancel bookings
+- Prevent double-booking (time overlap validation)
+- Room capacity management
+- Booking history records
+- Server-side validation rules
 
 ---
 
 ## Tech Stack
 
-**Backend**
+### Backend
+- C# / .NET (ASP.NET Core Web API)
+- Entity Framework Core
+- SQLite (development database)
 
-* C# / .NET (ASP.NET Core Web API)
-* Entity Framework Core
-* SQLite (development database)
+### Frontend (planned / optional)
+- React + Vite
 
-**Frontend (planned / optional)**
-
-* React + Vite
-
-**Other**
-
-* RESTful API
-* JSON DTOs
+### Other
+- RESTful API
+- JSON DTOs
 
 ---
 
@@ -52,16 +48,13 @@ Core focus of the project:
 
 The project follows a layered architecture:
 
-```
-API Controller â†?Application/Service â†?Domain â†?Infrastructure (EF Core) â†?Database
-```
+API Controller â†’ Application/Service â†’ Domain â†’ Infrastructure (EF Core) â†’ Database
 
 Responsibilities:
-
-* **Controllers**: HTTP handling only
-* **Services**: booking rules & business logic
-* **Domain**: entities and constraints
-* **Infrastructure**: database persistence
+- **Controllers**: HTTP handling only
+- **Services**: booking rules & business logic
+- **Domain**: entities and constraints
+- **Infrastructure**: database persistence
 
 Key design decision: booking validation occurs in the **service layer** to guarantee no overlapping reservations regardless of client behavior.
 
@@ -70,70 +63,51 @@ Key design decision: booking validation occurs in the **service layer** to guara
 ## Core Domain
 
 Entities:
-
-* **Room** â€?capacity, name, availability
-* **Booking** â€?time range reservation
-* **User/Organizer** â€?booking owner
+- **Room** â€” capacity, name, availability
+- **Booking** â€” time range reservation
+- **User/Organizer** â€” booking owner
 
 Business Rules:
-
-* A room cannot be booked if the time slot overlaps with an existing booking
-* End time must be after start time
-* Capacity must support meeting size
+- A room cannot be booked if the time slot overlaps with an existing booking
+- End time must be after start time
+- Capacity must support meeting size (if applicable)
 
 ---
 
 ## Run Locally
 
 ### Prerequisites
-
-* .NET SDK 7+ (or compatible)
+- .NET SDK 7+ (or compatible)
 
 ### Steps
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/meeting-room-reservation-api.git
+git clone https://github.com/ErmaoCyber/meeting-room-reservation-api.git
 cd meeting-room-reservation-api
-```
-
-Restore packages:
-
-```bash
 dotnet restore
-```
-
-Run the API:
-
-```bash
 dotnet run
 ```
 
-Server:
-
-```
-http://localhost:5000
-```
-
-(or the port shown in the console)
+The application will start on a local development port.  
+Check the console output after `dotnet run` to see the exact URL.
 
 ---
 
 ## Example API Endpoints
 
-**Get rooms**
+> Endpoint paths may vary slightly depending on your controller routes.
 
+**Get rooms**
 ```
 GET /api/rooms
 ```
 
 **Create booking**
-
 ```
 POST /api/bookings
 ```
 
 **Cancel booking**
-
 ```
 DELETE /api/bookings/{id}
 ```
@@ -142,22 +116,42 @@ DELETE /api/bookings/{id}
 
 ## What This Project Demonstrates
 
-* Designing REST APIs using ASP.NET Core
-* Separation of concerns in backend systems
-* Implementing scheduling conflict detection
-* Database integration with EF Core
-* Preparing backend for frontend integration
+- Designing REST APIs using ASP.NET Core
+- Separation of concerns in backend systems (layered architecture)
+- Implementing scheduling conflict detection
+- Database integration with EF Core
+- Backend service design ready for frontend integration
 
 ---
 
-## API Preview
+## API Documentation (Swagger)
 
-Swagger UI is available after starting the server at `/swagger`.
+The project exposes an interactive Swagger UI for exploring and testing API endpoints.
 
-<img src="images/swagger.png" width="900" alt="Swagger UI">
-<img src="images/swagger.png" width="800">
+After starting the application:
+
+```
+dotnet run
 ```
 
+Open your browser and navigate to:
+
+```
+http://localhost:<port>/swagger
+```
+
+The `<port>` number is printed in the console when the server starts.
+
+Example (my local environment):
+```
+http://localhost:5076/swagger/index.html
+```
+
+From Swagger you can:
+- View all available endpoints
+- Send requests directly from the browser
+- Inspect request and response models
+
+<img src="images/swagger.png" width="900" alt="Swagger UI preview">
+
 ---
-
-
