@@ -1,84 +1,163 @@
-Meeting Room Booking System 
+# Meeting Room Booking System
 
-A RESTful meeting room reservation backend built with ASP.NET Core (.NET 8).
+A .NET Web API project implementing meeting room scheduling with conflict detection and clean layered architecture.
 
-This project models a real office booking system and enforces scheduling rules such as time validation and conflict prevention.
-It is designed as a portfolio project to demonstrate backend engineering, API design, and clean architecture.
+---
 
-✨ Features
+## Overview
 
-Create and manage meeting rooms
+The **Meeting Room Booking System** is a web application that allows users to reserve meeting rooms, manage availability, and prevent scheduling conflicts. It models a realistic office booking workflow: rooms have capacities and time slots, and bookings must pass validation rules before being confirmed.
 
-Make bookings for specific time ranges
+Core focus of the project:
 
-Prevent double bookings
+* Scheduling logic & conflict detection
+* Layered backend architecture
+* REST API design
+* Database persistence
+* Prepared for a React admin/user interface
 
-Query room schedules
+---
 
-Proper HTTP status handling (400 / 404 / 409)
+## Key Features
 
-🧠 Business Rules
+* View available meeting rooms
+* Create and cancel bookings
+* Prevent double‑booking (time overlap validation)
+* Room capacity management
+* Booking history records
+* Server‑side validation rules
 
-The system enforces real calendar behaviour:
+---
 
-A booking cannot overlap another booking
+## Tech Stack
 
-Start time must be before end time
+**Backend**
 
-Inactive rooms cannot be reserved
+* C# / .NET (ASP.NET Core Web API)
+* Entity Framework Core
+* SQLite (development database)
 
-Invalid requests → 400 Bad Request
+**Frontend (planned / optional)**
 
-Room not found → 404 Not Found
+* React + Vite
 
-Booking conflict → 409 Conflict
+**Other**
 
-🏗 Architecture
+* RESTful API
+* JSON DTOs
 
-Layered architecture separating business logic from infrastructure:
+---
 
-Controllers → Application Services → Domain Entities → Repositories → Database
+## Architecture
 
-Business rules live in the Domain layer, not controllers.
+The project follows a layered architecture:
 
-🛠 Tech Stack
+```
+API Controller → Application/Service → Domain → Infrastructure (EF Core) → Database
+```
 
-.NET 8 / ASP.NET Core Web API
+Responsibilities:
 
-Entity Framework Core
+* **Controllers**: HTTP handling only
+* **Services**: booking rules & business logic
+* **Domain**: entities and constraints
+* **Infrastructure**: database persistence
 
-SQLite
+Key design decision: booking validation occurs in the **service layer** to guarantee no overlapping reservations regardless of client behavior.
 
-Dependency Injection
+---
 
-Swagger / OpenAPI
+## Core Domain
 
-▶️ How to Run
-Prerequisite
+Entities:
 
-Install .NET 8 SDK
+* **Room** – capacity, name, availability
+* **Booking** – time range reservation
+* **User/Organizer** – booking owner
 
-Check installation:
+Business Rules:
 
-dotnet --version
+* A room cannot be booked if the time slot overlaps with an existing booking
+* End time must be after start time
+* Capacity must support meeting size
 
-Start the API
+---
 
-cd src/MeetingRoomBooking.Api
+## Run Locally
+
+### Prerequisites
+
+* .NET SDK 7+ (or compatible)
+
+### Steps
+
+```bash
+git clone https://github.com/YOUR_USERNAME/MeetingRoomBooking.git
+cd MeetingRoomBooking
+```
+
+Restore packages:
+
+```bash
+dotnet restore
+```
+
+Run the API:
+
+```bash
 dotnet run
+```
 
-On first run the database is created automatically.
+Server:
 
-Swagger
+```
+http://localhost:5000
+```
 
-https://localhost:xxxx/swagger
+(or the port shown in the console)
 
-🎯 What This Project Demonstrates
+---
 
-REST API design
+## Example API Endpoints
 
-Clean architecture
+**Get rooms**
 
-Business rule enforcement
+```
+GET /api/rooms
+```
 
-Error handling with proper HTTP semantics
+**Create booking**
+
+```
+POST /api/bookings
+```
+
+**Cancel booking**
+
+```
+DELETE /api/bookings/{id}
+```
+
+---
+
+## What This Project Demonstrates
+
+* Designing REST APIs using ASP.NET Core
+* Separation of concerns in backend systems
+* Implementing scheduling conflict detection
+* Database integration with EF Core
+* Preparing backend for frontend integration
+
+---
+
+## API Preview
+
+The API is documented using Swagger UI.  
+After running the application, the interactive documentation is available at:
+
+http://localhost:5076/swagger
+
+
+Below is a preview of the running system:
+
+<img src="images/swagger.png" width="850">
